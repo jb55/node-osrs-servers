@@ -72,7 +72,6 @@ module.exports = function(opts, cb){
       .timeout(timeout * delay)
       .end(function(err, res){
         if (err && err.timeout) {
-          console.log("Timed out after " + err.timeout + " ms, retrying...");
           return download(n + 1);
         } else handleResponse(res);
       });
