@@ -1,6 +1,6 @@
 {
   "name": "osrs-servers",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Scrapes Old School RuneScape server info via js AST traversal",
   "main": "index.js",
   "scripts": {

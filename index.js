@@ -36,8 +36,8 @@ function parseServers(script){
 module.exports = function(opts, cb){
   var timeout = opts.timeout || 1000;
   if (_.isFunction(opts)) {
-    opts = {}
     cb = opts;
+    opts = {};
   }
 
   function doneParsing(dom, o){
