@@ -1,0 +1,23 @@
+{
+  "name": "osrs-servers",
+  "version": "0.0.0",
+  "description": "Scrapes Old School RuneScape server info via js AST traversal",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "osrs",
+    "runescape"
+  ],
+  "dependencies": {
+    "superagent": "*",
+    "falafel": "*",
+    "soupselect": "*",
+    "htmlparser": "*",
+    "underscore": "*"
+  },
+  "author": "Bill Casarin",
+  "license": "MIT"
+}
