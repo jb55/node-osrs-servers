@@ -40,23 +40,25 @@ module.exports = function(opts, cb){
     opts = {};
   }
 
-  function doneParsing(dom, o){
+  function parsed(dom, o, cb){
     var tags = o("script");
     var tag = _(tags).find(function(tag){
-      return tag.attribs && tag.attribs.language != null
+      return tag.attribs && tag.attribs.language != null;
     });
-    
+
+    if (tag == null) return cb("Not found in tags");
+
     var script = tag.children[0].raw;
     var servers = parseServers(script);
 
-    cb(null, servers);
+    return cb(null, servers);
   }
 
-  function handleResponse(res){
+  function handle(res, cb){
     var body    = res.body;
     var handler = new htmlparser.DefaultHandler(function(err, dom){
       if(err) return cb(err);
-      doneParsing(dom, select.bind(null, dom))
+      parsed(dom, select.bind(null, dom), cb);
     });
     var parser  = new htmlparser.Parser(handler);
 
@@ -65,15 +67,23 @@ module.exports = function(opts, cb){
 
   function download(n){
     var rate  = opts.rate || 1.5
+      , stop  = opts.stop || 4
       , delay = (n * opts.rate) || 1;
+
+    function retry(err, servers) {
+      if (err) {
+        if (n > stop) return cb(err);
+        return download(n + 1);
+      }
+      return cb(err, servers);
+    }
 
     request
       .get(opts.url || 'http://oldschool.runescape.com/slu')
       .timeout(timeout * delay)
       .end(function(err, res){
-        if (err && err.timeout) {
-          return download(n + 1);
-        } else handleResponse(res);
+        if (err) return retry(err);
+        handle(res, retry);
       });
   }
 
