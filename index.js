@@ -78,12 +78,19 @@ module.exports = function(opts, cb){
       return cb(err, servers);
     }
 
+    var retried = false;
+
     request
       .get(opts.url || 'http://oldschool.runescape.com/slu')
       .timeout(timeout * delay)
       .end(function(err, res){
-        if (err) return retry(err);
-        handle(res, retry);
+        if (!retried) {
+          if (err) {
+            retried = true;
+            return retry(err);
+          }
+          handle(res, retry);
+        }
       });
   }
 
